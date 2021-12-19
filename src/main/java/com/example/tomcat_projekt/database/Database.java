@@ -8,10 +8,10 @@ import java.util.logging.Logger;
 public abstract class Database {
     protected static Logger logger = Logger.getLogger(Database.class.getName());
     protected Connection connection = null;
-    protected String hostname = "",
-                     username = "",
-                     password = "",
-                     database = "";
+    protected String hostname = "localhost",
+                     username = "root",
+                     password = "SHW_Destroyer",
+                     database = "swpwebloginsignup";
 
     protected static String createConnectionString(
             String hostname,

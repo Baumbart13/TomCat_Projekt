@@ -1,5 +1,7 @@
 package com.example.tomcat_projekt.servlets;
 
+import com.example.tomcat_projekt.database.UserDatabase;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -7,7 +9,7 @@ import java.io.IOException;
 
 @WebServlet(name = "RegisterServlet", value = "/RegisterServlet")
 public class RegisterServlet extends ServletTemplate {
-    DatabaseManager dbm = new DatabaseManager();
+    UserDatabase dbm = new UserDatabase();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -29,7 +31,7 @@ public class RegisterServlet extends ServletTemplate {
         try{
             //return dbm.registerUser(email, password);
         }catch(Exception ex){
-            System.out(ex);
+            // figg die
         }
         return false;
     }
