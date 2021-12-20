@@ -14,5 +14,30 @@
     <h1>You are now in the final screen which is pretty useless, isn't it?</h1>
         <p>Bei se we you now have very virus</p>
     <h2><a href="https://youtu.be/0QEXdLCu1Kk?t=30">Noice</a></h2>
+    <form action="AppendToNotesServlet">
+        <label>New note</label>
+        <input type="text" name="new_note"><br>
+        <input type="submit" value="note_added">
+    </form>
+<script>
+    function RequestUserChat(arr) {
+        const x = new XMLHttpRequest();
+        x.onload = function(){
+            alert(this.responseText);
+            var arr = JSON.parse(this.responseText);
+            var html = (arr) => {
+                var s = "<table>";
+                for(i = 0; i < arr.length; ++i){
+                    var o = arr[i];
+                    s += "<tr>";
+                    s += "<td>" + o.note_timestamp + "</td>";
+                    s += "<td>" + o.note_message + "</td>";
+                }
+                s += "</table>";
+                return s;
+            }
+        }
+    }
+</script>
 </body>
 </html>

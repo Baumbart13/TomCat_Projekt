@@ -2,6 +2,7 @@ package com.example.tomcat_projekt.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 
 public class User {
     protected String email;
@@ -11,6 +12,7 @@ public class User {
     protected String password;
     protected LocalDate birthday;
     protected LocalDateTime join_date;
+    protected LinkedList<Note> notes;
 
     public User(
             String email,
@@ -87,5 +89,9 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public LinkedList<Note> getNotes(){
+        return notes;
     }
 }
