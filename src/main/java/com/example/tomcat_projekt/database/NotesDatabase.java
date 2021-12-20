@@ -15,7 +15,7 @@ public class NotesDatabase extends MySQLDatabase{
 
     public enum _TABLE_FIELDS {
         email_user,
-        write_time,
+        note_index,
         message
     }
 
@@ -64,7 +64,7 @@ public class NotesDatabase extends MySQLDatabase{
 
         sb.append("CREATE TABLE IF NOT EXISTS %s (");
         sb.append("%s VARCHAR(40) NOT NULL,"); // email_user
-        sb.append("%s TIMESTAMP NOT NULL,"); // write_time
+        sb.append("%s INT NOT NULL,"); // note_index
         sb.append("%s VARCHAR(500),"); // message
 
         sb.append("PRIMARY KEY(%s),"); // write_time
@@ -72,10 +72,10 @@ public class NotesDatabase extends MySQLDatabase{
 
         stmnt = connection.prepareStatement(String.format(sb.toString(),
                 _TABLE_FIELDS.email_user.name(),
-                _TABLE_FIELDS.write_time.name(),
+                _TABLE_FIELDS.note_index.name(),
                 _TABLE_FIELDS.message.name(),
                 // Primary Key
-                _TABLE_FIELDS.write_time.name(),
+                _TABLE_FIELDS.note_index.name(),
                 // Foreign Key
                 _TABLE_FIELDS.email_user.name(),
                 UserDatabase._TABLE_NAME,
@@ -87,7 +87,7 @@ public class NotesDatabase extends MySQLDatabase{
 
     public LinkedList<Note> getAllMessages(User user) throws SQLException{
         var sql = String.format("SELECT %s, %s FROM %s WHERE %s = ?;",
-                _TABLE_FIELDS.write_time.name(),
+                _TABLE_FIELDS.note_index.name(),
                 _TABLE_FIELDS.message.name(),
                 _TABLE_NAME,
                 UserDatabase._TABLE_FIELDS.email);
@@ -98,7 +98,7 @@ public class NotesDatabase extends MySQLDatabase{
         while(rs.next()){
             notes.add(new Note(
                     user,
-                    rs.getTimestamp(1).toLocalDateTime(),
+                    rs.getInt(1),
                     rs.getString(2)));
         }
         return notes;

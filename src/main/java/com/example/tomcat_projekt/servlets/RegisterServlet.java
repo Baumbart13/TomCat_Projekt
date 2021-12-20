@@ -30,7 +30,7 @@ public class RegisterServlet extends ServletTemplate {
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
         String username = request.getParameter("username");
-        var user = new User(email, firstname, lastname, username, password, LocalDate.now(), LocalDateTime.now());
+        var user = new User(email, firstname, lastname, username, password);
         boolean isSuccess = Register(user);
         RequestDispatcher d = request.getRequestDispatcher("/Login.jsp");
         d.forward(request, response);

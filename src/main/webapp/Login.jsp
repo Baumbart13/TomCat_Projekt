@@ -23,5 +23,7 @@
         <br/>
         <input type="submit" value="Log in">
     </form>
+    <h3>Not signed up yet? Just click <a href="Register.jsp">here.</a></h3>
+    <h3>Back to <a href="index.jsp">index</a> site.</h3>
 </body>
 </html>

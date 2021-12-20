@@ -26,30 +26,32 @@
 <script language="JavaScript">
     function ListAllEntriesButton() {
         const x = new XMLHttpRequest();
-        x.onload = function () {
+        x.onload = function(){
             alert(this.responseText);
             var arr = JSON.parse(this.responseText);
-            var html = () => {
-                var s = "<table>";
-                for (i = 0; i < arr.length; ++i) {
-                    var o = arr[i];
-                    s += "<tr>";
-                    s += "<td>" + o.email + "</td>";
-                    s += "<td>" + o.foreName + "</td>";
-                    s += "<td>" + o.lastName + "</td>";
-                    s += "<td>" + o.username + "</td>";
-                    s += "<td>" + o.password + "</td>";
-                    s += "<td>" + o.birthday + "</td>";
-                    s += "<td>" + o.join_date + "</td>";
-                }
-                s += "</table>";
-                return s;
-            }
+            var html =convertUserArrayToJson(arr);
             document.getElementById("user_table").innerHTML = html;
         }
         x.open("POST", "GetAllUsersServlet", true);
         x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         x.send();
+    }
+
+    function convertUserArrayToJson(arr) {
+        var s = "<table>";
+        for (i = 0; i < arr.length; ++i) {
+            var o = arr[i];
+            s += "<tr>";
+            s += "<td>" + o.email + "</td>";
+            s += "<td>" + o.foreName + "</td>";
+            s += "<td>" + o.lastName + "</td>";
+            s += "<td>" + o.username + "</td>";
+            s += "<td>" + o.password + "</td>";
+            s += "<td>" + o.birthday + "</td>";
+            s += "<td>" + o.join_date + "</td>";
+        }
+        s += "</table>";
+        return s;
     }
 </script>
 </body>

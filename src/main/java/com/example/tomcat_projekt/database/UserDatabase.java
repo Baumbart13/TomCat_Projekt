@@ -6,6 +6,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
@@ -73,7 +75,7 @@ public class UserDatabase extends MySQLDatabase {
         sb.append("%s VARCHAR(130) NOT NULL,"); // username
         sb.append("%s VARCHAR(130) NOT NULL,"); // password
         sb.append("%s DATE,"); // birthday
-        sb.append("%s TIMESTAMP NOT NULL,"); // join_date
+        sb.append("%s TIMESTAMP,"); // join_date
         sb.append("PRIMARY KEY(%s));"); // email
 
         var stmntStr = sb.toString();
@@ -95,35 +97,36 @@ public class UserDatabase extends MySQLDatabase {
     }
 
     public LinkedList<User> getAllUser() throws SQLException {
-        var sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s;",
+        var sql = String.format("SELECT " +
+                        "%s " + // email
+                        ",%s " + // forename
+                        ",%s " + // lastname
+                        ",%s " + // username
+                        ",%s " + // password
+                        "FROM %s;", // _TABLE_NAME
                 _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.forename.name(),
                 _TABLE_FIELDS.lastname.name(),
                 _TABLE_FIELDS.username.name(),
                 _TABLE_FIELDS.password.name(),
-                _TABLE_FIELDS.birthday.name(),
-                _TABLE_FIELDS.join_date.name());
+                _TABLE_NAME);
 
         var users = new LinkedList<User>();
         var stmnt = connection.createStatement();
         var rs = stmnt.executeQuery(sql);
 
         while (rs.next()) {
-            var email = rs.getString(1);
-            var forename = rs.getString(2);
-            var lastname = rs.getString(3);
-            var username = rs.getString(4);
-            var password = rs.getString(5);
-            var birthday = rs.getDate(6).toLocalDate();
-            var join_date = rs.getTimestamp(7).toLocalDateTime();
+            var email = rs.getString(_TABLE_FIELDS.email.name());
+            var forename = rs.getString(_TABLE_FIELDS.forename.name());
+            var lastname = rs.getString(_TABLE_FIELDS.lastname.name());
+            var username = rs.getString(_TABLE_FIELDS.forename.name());
+            var password = rs.getString(_TABLE_FIELDS.password.name());
             users.add(new User(
                     email,
                     forename,
                     lastname,
                     username,
-                    password,
-                    birthday,
-                    join_date
+                    password
             ));
         }
         rs.close();
@@ -150,16 +153,14 @@ public class UserDatabase extends MySQLDatabase {
 
     public boolean insertUser(User user) throws SQLException {
         var sql = String.format(
-                "INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s)" +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?);",
+                "INSERT INTO %s (%s, %s, %s, %s, %s)" +
+                        "VALUES (?, ?, ?, ?, ?);",
                 _TABLE_NAME,
                 _TABLE_FIELDS.email,
                 _TABLE_FIELDS.username,
                 _TABLE_FIELDS.forename,
                 _TABLE_FIELDS.lastname,
-                _TABLE_FIELDS.password,
-                _TABLE_FIELDS.birthday,
-                _TABLE_FIELDS.join_date);
+                _TABLE_FIELDS.password);
         var success = false;
         var stmt = connection.prepareStatement(sql);
         stmt.setString(1, user.getEmail());
@@ -167,42 +168,41 @@ public class UserDatabase extends MySQLDatabase {
         stmt.setString(3, user.getForename());
         stmt.setString(4, user.getLastname());
         stmt.setString(5, user.getPassword());
-        stmt.setDate(6, Date.valueOf(user.getBirthday()));
-        stmt.setTimestamp(7, Timestamp.valueOf(user.getJoin_date()));
         success = stmt.execute();
 
         return !success;
     }
 
     public User getUser(String email, String username) throws SQLException {
-        var sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s = ? OR %s = ?;",
-                _TABLE_FIELDS.email.name(),
+        var sql = String.format("SELECT" +
+                        "%s," + // forename
+                        "%s," + // lastname
+                        "%s," + // password
+                        "FROM %s " +
+                        "WHERE %s = ?" +
+                        "OR %s = ?;",
                 _TABLE_FIELDS.forename.name(),
                 _TABLE_FIELDS.lastname.name(),
-                _TABLE_FIELDS.username.name(),
                 _TABLE_FIELDS.password.name(),
-                _TABLE_FIELDS.birthday.name(),
-                _TABLE_FIELDS.join_date.name(),
-
                 _TABLE_NAME,
-
                 _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.username.name());
+
         var stmnt = connection.prepareStatement(sql);
         var rs = stmnt.executeQuery();
         User user = new User();
         if (rs.next()) {
+            var forename = rs.getString(_TABLE_FIELDS.forename.name());
+            var lastname = rs.getString(_TABLE_FIELDS.lastname.name());
+            var password = rs.getString(_TABLE_FIELDS.password.name());
             user = new User(
-                    rs.getString(1),
-                    rs.getString(2),
-                    rs.getString(3),
-                    rs.getString(4),
-                    rs.getString(5),
-                    rs.getDate(6).toLocalDate(),
-                    rs.getTimestamp(7).toLocalDateTime()
-            );
+                    email,
+                    forename,
+                    lastname,
+                    username,
+                    password);
         }
-
+        rs.close();
         return user;
     }
 
@@ -223,7 +223,9 @@ public class UserDatabase extends MySQLDatabase {
         stmnt.setString(2, user.getPassword());
         var rs = stmnt.executeQuery();
         if (rs.next()) {
-            return rs.getInt(1) > 0;
+            var i = rs.getInt(1) > 0;
+            rs.close();
+            return i;
         }
         return false;
     }

@@ -4,17 +4,17 @@ import java.time.LocalDateTime;
 
 public class Note {
     protected User user;
-    protected LocalDateTime note_timestamp;
+    protected int note_index;
     protected String note_message;
 
-    public Note(User user, LocalDateTime note_timestamp, String note_message) {
+    public Note(User user, int note_index, String note_message) {
         this.setUser(user);
-        this.setNote_timestamp(note_timestamp);
+        this.setNote_index(note_index);
         this.setNote_message(note_message);
     }
 
     public Note(){
-        this(new User(), LocalDateTime.now(), "");
+        this(new User(), 0, "");
     }
 
     public User getUser() {
@@ -25,12 +25,12 @@ public class Note {
         this.user = user;
     }
 
-    public LocalDateTime getNote_timestamp() {
-        return note_timestamp;
+    public int getNote_index() {
+        return note_index;
     }
 
-    public void setNote_timestamp(LocalDateTime note_timestamp) {
-        this.note_timestamp = note_timestamp;
+    public void setNote_index(int note_index) {
+        this.note_index = note_index;
     }
 
     public String getNote_message() {

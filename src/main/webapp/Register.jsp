@@ -42,6 +42,8 @@
     <input type="password" name="userpass" value="" placeholder="Haley"/>
     <br/>
     <input type="submit" value="Register Me!">
+    <h3><a href="Login.jsp">Already have an account?</a></h3>
+    <h3>Back to <a href="index.jsp">index</a> site</h3>
 </form>
 </body>
 </html>

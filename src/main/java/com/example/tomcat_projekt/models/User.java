@@ -10,8 +10,6 @@ public class User {
     protected String lastname;
     protected String username;
     protected String password;
-    protected LocalDate birthday;
-    protected LocalDateTime join_date;
     protected LinkedList<Note> notes;
 
     public User(
@@ -19,36 +17,16 @@ public class User {
             String forename,
             String lastname,
             String username,
-            String password,
-            LocalDate birthday,
-            LocalDateTime join_date) {
+            String password) {
         this.setEmail(email);
         this.setForename(forename);
         this.setLastname(lastname);
         this.setUsername(username);
         this.setPassword(password);
-        this.setBirthday(birthday);
-        this.setJoin_date(join_date);
     }
 
     public User(){
-        this("", "", "", "", "", LocalDate.MIN, LocalDateTime.now());
-    }
-
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
-    }
-
-    public LocalDateTime getJoin_date() {
-        return join_date;
-    }
-
-    public void setJoin_date(LocalDateTime join_date) {
-        this.join_date = join_date;
+        this("", "", "", "", "");
     }
 
     public String getEmail() {
