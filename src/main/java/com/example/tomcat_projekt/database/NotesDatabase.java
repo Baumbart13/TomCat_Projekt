@@ -2,6 +2,7 @@ package com.example.tomcat_projekt.database;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 
 public class NotesDatabase extends MySQLDatabase{
@@ -20,6 +21,12 @@ public class NotesDatabase extends MySQLDatabase{
 
     public NotesDatabase(String hostname, String user, String pass, String database) {
         super(hostname, user, pass, database);
+        try {
+            this.createDatabase();
+            this.createTable();
+        }catch(SQLException e){
+            logger.log(Level.SEVERE, e.getMessage());
+        }
     }
 
     public NotesDatabase(NotesDatabase notesDB) {

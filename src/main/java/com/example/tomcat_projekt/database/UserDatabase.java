@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.LinkedList;
+import java.util.logging.Level;
 
 public class UserDatabase extends MySQLDatabase {
     public static final String _TABLE_NAME = "notes_user";
@@ -28,6 +29,12 @@ public class UserDatabase extends MySQLDatabase {
 
     public UserDatabase(String hostname, String user, String pass, String database) {
         super(hostname, user, pass, database);
+        try {
+            this.createDatabase();
+            this.createTable();
+        }catch(SQLException e){
+            logger.log(Level.SEVERE, e.getMessage());
+        }
     }
 
     public UserDatabase(UserDatabase userDb) {
