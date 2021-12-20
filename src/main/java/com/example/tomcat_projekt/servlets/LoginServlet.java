@@ -9,7 +9,8 @@ import com.example.tomcat_projekt.database.UserDatabase;
 @WebServlet(name = "LoginServlet", value = "/LoginServlet")
 
 public class LoginServlet extends ServletTemplate {
-    UserDatabase dbm = new UserDatabase();
+    public static UserDatabase dbm = new UserDatabase();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.LinkedList;
 
-import static com.example.tomcat_projekt.database.UserDatabase._TABLE_FIELDS.email;
-
 public class UserDatabase extends MySQLDatabase {
     public static final String _TABLE_NAME = "notes_user";
     public static final String _DATABASE_NAME = "notes";
@@ -70,7 +68,7 @@ public class UserDatabase extends MySQLDatabase {
         sb.append("PRIMARY KEY(%s));"); // email
 
         stmnt = connection.prepareStatement(String.format(sb.toString(),
-                email.name(),
+                _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.forename.name(),
                 _TABLE_FIELDS.lastname.name(),
                 _TABLE_FIELDS.username.name(),
@@ -78,7 +76,7 @@ public class UserDatabase extends MySQLDatabase {
                 _TABLE_FIELDS.birthday.name(),
                 _TABLE_FIELDS.join_date.name(),
                 // Primary Key
-                email.name()
+                _TABLE_FIELDS.email.name()
         ));
 
         stmnt.execute();
@@ -86,7 +84,7 @@ public class UserDatabase extends MySQLDatabase {
 
     public LinkedList<User> getAllUser() throws SQLException {
         var sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s;",
-                email.name(),
+                _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.forename.name(),
                 _TABLE_FIELDS.lastname.name(),
                 _TABLE_FIELDS.username.name(),
@@ -123,7 +121,7 @@ public class UserDatabase extends MySQLDatabase {
     public boolean hasUser(User user) throws SQLException {
         var sql = String.format("SELECT COUNT(*) AS 'user_count' FROM %s WHERE %s = ? OR %s = ?",
                 _TABLE_NAME,
-                email,
+                _TABLE_FIELDS.email,
                 _TABLE_FIELDS.username);
         boolean hasUser = true;
         var stmnt = connection.prepareStatement(sql);
@@ -143,7 +141,7 @@ public class UserDatabase extends MySQLDatabase {
                 "INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s)" +
                         "VALUES (?, ?, ?, ?, ?, ?, ?);",
                 _TABLE_NAME,
-                email,
+                _TABLE_FIELDS.email,
                 _TABLE_FIELDS.username,
                 _TABLE_FIELDS.forename,
                 _TABLE_FIELDS.lastname,
@@ -165,14 +163,53 @@ public class UserDatabase extends MySQLDatabase {
     }
 
     public User getUser(String email, String username) throws SQLException{
-        var sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s;",
+        var sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s = ? OR %s = ?;",
                 _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.forename.name(),
                 _TABLE_FIELDS.lastname.name(),
                 _TABLE_FIELDS.username.name(),
                 _TABLE_FIELDS.password.name(),
                 _TABLE_FIELDS.birthday.name(),
-                _TABLE_FIELDS.join_date.name());
+                _TABLE_FIELDS.join_date.name(),
 
+                _TABLE_NAME,
+
+                _TABLE_FIELDS.email.name(),
+                _TABLE_FIELDS.username.name());
+        var stmnt = connection.prepareStatement(sql);
+        var rs = stmnt.executeQuery();
+        User user = new User();
+        if(rs.next()){
+            user = new User(
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4),
+                    rs.getString(5),
+                    rs.getDate(6).toLocalDate(),
+                    rs.getTimestamp(7).toLocalDateTime()
+            );
+        }
+
+        return user;
+    }
+
+    public boolean canLogin(String email, String password) throws SQLException{
+        var u = new User();
+        u.setEmail(email);
+        u.setPassword(password);
+        return canLogin(u);
+    }
+
+    public boolean canLogin(User user) throws SQLException {
+        var sql = String.format("SELECT COUNT(*) FROM %s WHERE %s = ? AND %s = ?;",
+                _TABLE_NAME,
+                _TABLE_FIELDS.email.name(),
+                _TABLE_FIELDS.password.name());
+        var rs = connection.prepareStatement(sql).executeQuery();
+        if(rs.next()){
+            return rs.getInt(1) > 0;
+        }
+        return false;
     }
 }

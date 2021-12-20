@@ -9,7 +9,8 @@ import java.io.IOException;
 
 @WebServlet(name = "RegisterServlet", value = "/RegisterServlet")
 public class RegisterServlet extends ServletTemplate {
-    UserDatabase dbm = new UserDatabase();
+    public static UserDatabase dbm = new UserDatabase();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
