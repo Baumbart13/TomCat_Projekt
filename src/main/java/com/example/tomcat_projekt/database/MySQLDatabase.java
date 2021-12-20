@@ -15,14 +15,14 @@ public abstract class MySQLDatabase extends Database{
             if(!connection.isClosed()){
                 logger.log(Level.WARNING, "Connection already opened");
             }
-            return;
         }
 
-        connection = DriverManager.getConnection(String.format(
-                "jdbc:mysql://%s%s", hostname, database),
-                username,
-                password
-        );
+        var conString = String.format("jdbc:mysql://%s/%s?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC",
+                hostname, database);
+        connection = DriverManager.getConnection(
+                conString,
+                username, password);
+        return;
     }
 
     @Override

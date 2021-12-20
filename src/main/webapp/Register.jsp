@@ -7,11 +7,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    var errorMessage = (String)request.getAttribute("error");
+    String errorMessage = (String)request.getAttribute("error");
 %>
 <html>
 <head>
-    <title>My computer haz 3 virus</title>
+    <title>Register</title>
     <style>
         .error{
             color:red;
@@ -25,7 +25,7 @@
         out.append("<p class=\"error\">"+errorMessage+"</p>");
     }
 %>
-<form action="<RegisterServlet>" method="post">
+<form action="RegisterServlet" method="post">
     <label>E-Mail:</label>
     <input type="email" name="usermail" value="" placeholder="eminem@marshall.matters"/>
     <br/>

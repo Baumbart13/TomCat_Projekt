@@ -13,16 +13,21 @@ import java.sql.SQLException;
 
 @WebServlet(name = "GetAllUsersServlet", value = "/GetAllUsersServlet")
 public class GetAllUsersServlet extends ServletTemplate{
-    public static UserDatabase db = new UserDatabase();
+    public static UserDatabase db = null;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if(db == null){
+            db = new UserDatabase();
+        }
+
         // get all sql-data from SQL->notes_user
         String json = "";
         try{
             db.connect();
             var l = db.getAllUser();
             json = new Gson().toJson(l);
+            db.disconnect();
         }catch (SQLException e){
             throw new ServletException(e.getMessage());
         }

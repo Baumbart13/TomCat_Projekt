@@ -11,9 +11,8 @@
     <title>Welkom Viruz</title>
 </head>
 <body>
-    <h1>You are now in the final screen which is pretty useless, isn't it?</h1>
-        <p>Bei se we you now have very virus</p>
-    <h2><a href="https://youtu.be/0QEXdLCu1Kk?t=30">Noice</a></h2>
+    <h1>You are now in the final screen where are all your notes</h1>
+    <p><a href="https://youtu.be/0QEXdLCu1Kk?t=30">Noice</a></p>
     <form action="AppendToNotesServlet">
         <label>New note</label>
         <input type="text" name="new_note"><br>

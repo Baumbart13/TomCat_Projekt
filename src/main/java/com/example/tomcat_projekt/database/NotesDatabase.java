@@ -1,7 +1,11 @@
 package com.example.tomcat_projekt.database;
 
+import com.example.tomcat_projekt.models.Note;
+import com.example.tomcat_projekt.models.User;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 
 
@@ -16,14 +20,16 @@ public class NotesDatabase extends MySQLDatabase{
     }
 
     public NotesDatabase() {
-        this("", "", "", _DATABASE_NAME);
+        this("localhost:3306", "root", "DuArschloch4", _DATABASE_NAME);
     }
 
     public NotesDatabase(String hostname, String user, String pass, String database) {
         super(hostname, user, pass, database);
         try {
+            this.connect();
             this.createDatabase();
             this.createTable();
+            this.disconnect();
         }catch(SQLException e){
             logger.log(Level.SEVERE, e.getMessage());
         }
@@ -77,5 +83,24 @@ public class NotesDatabase extends MySQLDatabase{
         ));
 
         stmnt.execute();
+    }
+
+    public LinkedList<Note> getAllMessages(User user) throws SQLException{
+        var sql = String.format("SELECT %s, %s FROM %s WHERE %s = ?;",
+                _TABLE_FIELDS.write_time.name(),
+                _TABLE_FIELDS.message.name(),
+                _TABLE_NAME,
+                UserDatabase._TABLE_FIELDS.email);
+        var stmnt = connection.prepareStatement(sql);
+        stmnt.setString(1, user.getEmail());
+        var rs  = stmnt.executeQuery();
+        LinkedList<Note> notes = new LinkedList<Note>();
+        while(rs.next()){
+            notes.add(new Note(
+                    user,
+                    rs.getTimestamp(1).toLocalDateTime(),
+                    rs.getString(2)));
+        }
+        return notes;
     }
 }

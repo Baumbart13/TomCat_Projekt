@@ -24,15 +24,17 @@ public class UserDatabase extends MySQLDatabase {
     }
 
     public UserDatabase() {
-        this("", "", "", _DATABASE_NAME);
+        this("localhost:3306", "root", "DuArschloch4", _DATABASE_NAME);
     }
 
     public UserDatabase(String hostname, String user, String pass, String database) {
         super(hostname, user, pass, database);
         try {
+            this.connect();
             this.createDatabase();
             this.createTable();
-        }catch(SQLException e){
+            this.disconnect();
+        } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
     }
@@ -74,7 +76,9 @@ public class UserDatabase extends MySQLDatabase {
         sb.append("%s TIMESTAMP NOT NULL,"); // join_date
         sb.append("PRIMARY KEY(%s));"); // email
 
-        stmnt = connection.prepareStatement(String.format(sb.toString(),
+        var stmntStr = sb.toString();
+        stmntStr = String.format(stmntStr,
+                _TABLE_NAME,
                 _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.forename.name(),
                 _TABLE_FIELDS.lastname.name(),
@@ -84,7 +88,8 @@ public class UserDatabase extends MySQLDatabase {
                 _TABLE_FIELDS.join_date.name(),
                 // Primary Key
                 _TABLE_FIELDS.email.name()
-        ));
+        );
+        stmnt = connection.prepareStatement(stmntStr);
 
         stmnt.execute();
     }
@@ -143,7 +148,7 @@ public class UserDatabase extends MySQLDatabase {
         return hasUser;
     }
 
-    public boolean insertUser(User user) throws SQLException{
+    public boolean insertUser(User user) throws SQLException {
         var sql = String.format(
                 "INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s)" +
                         "VALUES (?, ?, ?, ?, ?, ?, ?);",
@@ -156,20 +161,20 @@ public class UserDatabase extends MySQLDatabase {
                 _TABLE_FIELDS.birthday,
                 _TABLE_FIELDS.join_date);
         var success = false;
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, user.getEmail());
-            stmt.setString(2, user.getUsername());
-            stmt.setString(3, user.getForename());
-            stmt.setString(4, user.getLastname());
-            stmt.setString(5, user.getPassword());
-            stmt.setDate(6, Date.valueOf(user.getBirthday()));
-            stmt.setTimestamp(7, Timestamp.valueOf(user.getJoin_date()));
-            success = stmt.execute();
-        }
-        return success;
+        var stmt = connection.prepareStatement(sql);
+        stmt.setString(1, user.getEmail());
+        stmt.setString(2, user.getUsername());
+        stmt.setString(3, user.getForename());
+        stmt.setString(4, user.getLastname());
+        stmt.setString(5, user.getPassword());
+        stmt.setDate(6, Date.valueOf(user.getBirthday()));
+        stmt.setTimestamp(7, Timestamp.valueOf(user.getJoin_date()));
+        success = stmt.execute();
+
+        return !success;
     }
 
-    public User getUser(String email, String username) throws SQLException{
+    public User getUser(String email, String username) throws SQLException {
         var sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s = ? OR %s = ?;",
                 _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.forename.name(),
@@ -186,7 +191,7 @@ public class UserDatabase extends MySQLDatabase {
         var stmnt = connection.prepareStatement(sql);
         var rs = stmnt.executeQuery();
         User user = new User();
-        if(rs.next()){
+        if (rs.next()) {
             user = new User(
                     rs.getString(1),
                     rs.getString(2),
@@ -201,7 +206,7 @@ public class UserDatabase extends MySQLDatabase {
         return user;
     }
 
-    public boolean canLogin(String email, String password) throws SQLException{
+    public boolean canLogin(String email, String password) throws SQLException {
         var u = new User();
         u.setEmail(email);
         u.setPassword(password);
@@ -213,8 +218,11 @@ public class UserDatabase extends MySQLDatabase {
                 _TABLE_NAME,
                 _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.password.name());
-        var rs = connection.prepareStatement(sql).executeQuery();
-        if(rs.next()){
+        var stmnt = connection.prepareStatement(sql);
+        stmnt.setString(1, user.getEmail());
+        stmnt.setString(2, user.getPassword());
+        var rs = stmnt.executeQuery();
+        if (rs.next()) {
             return rs.getInt(1) > 0;
         }
         return false;
