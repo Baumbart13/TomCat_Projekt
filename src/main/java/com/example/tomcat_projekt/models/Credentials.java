@@ -1,10 +1,10 @@
 package com.example.tomcat_projekt.models;
 import java.io.*;
-
-import static com.example.tomcat_projekt.models.Error.errf;
-import static com.example.tomcat_projekt.models.Error.errlnf;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Credentials {
+    protected static Logger logger = Logger.getLogger(Credentials.class.getName());
     private static BufferedReader reader = null;
     public static final String csvSeparator = ",";
     public static final String lineSeparator = System.lineSeparator();
@@ -33,7 +33,7 @@ public class Credentials {
         try {
             out = new BufferedReader(new FileReader(file));
         }catch(FileNotFoundException e){
-            errlnf("File \"%s\" not found", new File(file).getAbsolutePath());
+            logger.log(Level.SEVERE,"File \"%s\" not found", new File(file).getAbsolutePath());
             e.printStackTrace();
         }catch(IOException e){
             e.printStackTrace();
@@ -47,12 +47,7 @@ public class Credentials {
     }
 
     public static DatabaseCredentials loadDatabase(String file){
-        var user = "root";
-        var pass = "SHW_Destroyer02";
-        var database = "notes";
-        var host = "localhost";
-
-        var out = new DatabaseCredentials(host,user,pass,database);
+        var out = new DatabaseCredentials("", "", "", "");
 
         try{
             reader = initReader(file);
@@ -65,12 +60,12 @@ public class Credentials {
             }
             out = new DatabaseCredentials(splittedLine[0], splittedLine[1], splittedLine[2], splittedLine[3]);
         }catch(FileNotFoundException e){
-            errlnf("File \"%s\" not found", new File(file).getAbsolutePath());
+            logger.log(Level.SEVERE, "File \"%s\" not found", new File(file).getAbsolutePath());
             e.printStackTrace();
         }catch(IOException e){
             e.printStackTrace();
         }catch (NullPointerException e){
-            errf("Corrupted database file!");
+            logger.log(Level.WARNING, "Corrupted database file!");
             e.printStackTrace();
         }
         return out;
