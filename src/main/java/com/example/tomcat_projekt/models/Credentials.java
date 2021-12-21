@@ -11,10 +11,10 @@ public class Credentials {
     protected Credentials(){System.err.println("How did you call this? Go away!!"); System.exit(-1);}
 
     public static class DatabaseCredentials{
-        private String mUser;
-        private String mPassword;
-        private String mDatabase;
-        private String mHost;
+        private final String mUser;
+        private final String mPassword;
+        private final String mDatabase;
+        private final String mHost;
         public DatabaseCredentials(String host, String user, String pass, String database){
             mUser = user;
             mPassword = pass;
