@@ -1,5 +1,6 @@
 package com.example.tomcat_projekt.models;
 import java.io.*;
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,8 +50,9 @@ public class Credentials {
     public static DatabaseCredentials loadDatabase(String file){
         var out = new DatabaseCredentials("", "", "", "");
 
-        try{
-            reader = initReader(file);
+        throw new UnsupportedOperationException("TODO: export resources to tomcat-folder");
+        /*try{
+            reader = initReader(file); // TODO: export resources to tomcat-folder
             if(!reader.readLine().contains("hostname,user,password,database")){
                 throw new IOException("Corrupted database file!");
             }
@@ -68,6 +70,6 @@ public class Credentials {
             logger.log(Level.WARNING, "Corrupted database file!");
             e.printStackTrace();
         }
-        return out;
+        return out;*/
     }
 }
