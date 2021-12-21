@@ -1,7 +1,5 @@
 package com.example.tomcat_projekt.models;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 public class User {

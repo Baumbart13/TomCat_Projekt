@@ -1,13 +1,9 @@
 package com.example.tomcat_projekt.database;
 
-import com.example.tomcat_projekt.models.*;
+import com.example.tomcat_projekt.models.User;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
@@ -26,7 +22,7 @@ public class UserDatabase extends MySQLDatabase {
     }
 
     public UserDatabase() {
-        this("localhost:3306", "root", "DuArschloch4", _DATABASE_NAME);
+        super();
     }
 
     public UserDatabase(String hostname, String user, String pass, String database) {

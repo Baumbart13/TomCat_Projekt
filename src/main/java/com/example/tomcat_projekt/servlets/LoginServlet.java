@@ -1,11 +1,14 @@
 package com.example.tomcat_projekt.servlets;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import com.example.tomcat_projekt.database.UserDatabase;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import com.example.tomcat_projekt.database.UserDatabase;
 @WebServlet(name = "LoginServlet", value = "/LoginServlet")
 
 public class LoginServlet extends ServletTemplate {

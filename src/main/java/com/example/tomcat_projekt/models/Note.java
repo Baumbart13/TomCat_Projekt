@@ -1,7 +1,5 @@
 package com.example.tomcat_projekt.models;
 
-import java.time.LocalDateTime;
-
 public class Note {
     protected User user;
     protected int note_index;

@@ -2,7 +2,6 @@ package com.example.tomcat_projekt.services;
 
 import com.example.tomcat_projekt.database.UserDatabase;
 import com.example.tomcat_projekt.models.User;
-import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
 import java.sql.SQLException;

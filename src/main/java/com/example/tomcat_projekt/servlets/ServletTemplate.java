@@ -1,7 +1,5 @@
 package com.example.tomcat_projekt.servlets;
 
-import com.example.tomcat_projekt.database.MySQLDatabase;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

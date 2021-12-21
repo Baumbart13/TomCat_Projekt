@@ -3,13 +3,11 @@ package com.example.tomcat_projekt.servlets;
 import com.example.tomcat_projekt.database.NotesDatabase;
 import com.example.tomcat_projekt.database.UserDatabase;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 @WebServlet(name = "AppendToServlet", value = "/AppendToServlet")
 public class AppendToNotesServlet extends ServletTemplate{

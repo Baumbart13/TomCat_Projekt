@@ -11,7 +11,6 @@ import java.util.logging.Level;
 
 public class NotesDatabase extends MySQLDatabase{
     public static final String _TABLE_NAME = "notes_notes";
-    public static final String _DATABASE_NAME = "notes";
 
     public enum _TABLE_FIELDS {
         email_user,
@@ -20,7 +19,7 @@ public class NotesDatabase extends MySQLDatabase{
     }
 
     public NotesDatabase() {
-        this("localhost:3306", "root", "DuArschloch4", _DATABASE_NAME);
+        super();
     }
 
     public NotesDatabase(String hostname, String user, String pass, String database) {
