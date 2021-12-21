@@ -240,3 +240,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# project specific
+res/credentials/database.csv
