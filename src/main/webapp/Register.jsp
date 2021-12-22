@@ -12,11 +12,7 @@
 <html>
 <head>
     <title>Register</title>
-    <style>
-        .error{
-            color:red;
-        }
-    </style>
+    <link rel="stylesheet" href="style/default_style.css">
 </head>
 <body>
 <h1>Register</h1>

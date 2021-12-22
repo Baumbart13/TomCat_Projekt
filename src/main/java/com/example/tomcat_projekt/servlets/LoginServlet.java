@@ -1,6 +1,7 @@
 package com.example.tomcat_projekt.servlets;
 
 import com.example.tomcat_projekt.database.UserDatabase;
+import com.example.tomcat_projekt.models.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,21 +29,44 @@ public class LoginServlet extends ServletTemplate {
         String password = request.getParameter("userpass");
         boolean isSuccess = checkIfValid(email, password);
 
+        RequestDispatcher d;
         var session = request.getSession();
-        session.setAttribute("isLoginGranted", isSuccess);
-        RequestDispatcher d = request.getRequestDispatcher("/Welcome.jsp");
+        if(isSuccess){
+            var u = getUser(email, "");
+            session.setAttribute("usermail", u.getEmail());
+            session.setAttribute("username", u.getUsername());
+            session.setAttribute("isLoginGranted", true);
+            d = request.getRequestDispatcher("/Welcome.jsp");
+        }else{
+            request.setAttribute("error", "Please check your email and password if both are valid");
+            d = request.getRequestDispatcher("/Login.jsp");
+        }
         d.forward(request, response);
     }
 
-    private boolean checkIfValid(String email, String password) {
+    private boolean checkIfValid(String email, String password) throws ServletException {
         boolean success = false;
         try {
             dbm.connect();
             success = dbm.canLogin(email, password);
             dbm.disconnect();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ServletException(e.getMessage());
         }
         return success;
+    }
+
+    private User getUser(String email, String username) throws ServletException{
+        var u = new User();
+        u.setEmail(email);
+        u.setUsername(username);
+        try{
+            dbm.connect();
+            u = dbm.getUser(u.getEmail(), u.getUsername());
+            dbm.disconnect();
+        }catch (SQLException e){
+            throw new ServletException(e.getMessage());
+        }
+        return u;
     }
 }

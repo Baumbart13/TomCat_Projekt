@@ -9,11 +9,12 @@
 <html>
 <head>
     <title>Hello, this is JSP</title>
+    <link rel="stylesheet" href="style/default_style.css">
 </head>
 <body>
 <h1>Welcome to your notes</h1>
 <p>Already a member? <a href="Login.jsp">Login</a></p><br/>
-<p>Never been here before? Register <a href="Register.jsp">here</a></p>
+<p>Never been here before? Register <a href="Register.jsp">here</a></p><br/>
 <button type="button" onclick="ListAllEntriesButton()">
     List all entries
 </button>
@@ -39,12 +40,15 @@
 
     function convertUserArrayToJson(arr) {
         var s = "<table>";
+        s += "<tr><th>E-Mail</th><th>Forename</th><th>Lastname</th><th>Username</th><th>Password</th><th>Birthday</th>" +
+            "<th>Member since</th></tr>";
         for (i = 0; i < arr.length; ++i) {
             var o = arr[i];
+            // [{"email":"asd@asd.asd","forename":"123456789","lastname":"123456789","username":"123456789"}]
             s += "<tr>";
             s += "<td>" + o.email + "</td>";
-            s += "<td>" + o.foreName + "</td>";
-            s += "<td>" + o.lastName + "</td>";
+            s += "<td>" + o.forename + "</td>";
+            s += "<td>" + o.lastname + "</td>";
             s += "<td>" + o.username + "</td>";
             s += "<td>" + o.password + "</td>";
             s += "<td>" + o.birthday + "</td>";

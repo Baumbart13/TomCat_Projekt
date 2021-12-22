@@ -6,6 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>Systemtest.
+<html>
+<head>
+    <link rel="stylesheet" href="style/default_style.css">
+</head>
 <body>
     <h1>Anmelden</h1>
     <%

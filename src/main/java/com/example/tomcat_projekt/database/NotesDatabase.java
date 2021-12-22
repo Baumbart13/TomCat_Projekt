@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 
 
-public class NotesDatabase extends MySQLDatabase{
+public class NotesDatabase extends MySQLDatabase {
     public static final String _TABLE_NAME = "notes_notes";
 
     public enum _TABLE_FIELDS {
@@ -29,7 +29,7 @@ public class NotesDatabase extends MySQLDatabase{
             this.createDatabase();
             this.createTable();
             this.disconnect();
-        }catch(SQLException e){
+        } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
     }
@@ -66,7 +66,7 @@ public class NotesDatabase extends MySQLDatabase{
         sb.append("%s INT NOT NULL,"); // note_index
         sb.append("%s VARCHAR(500),"); // message
 
-        sb.append("PRIMARY KEY(%s),"); // write_time
+        sb.append("PRIMARY KEY(%s),"); // note_index
         sb.append("FOREIGN KEY(%s) REFERENCES %s(%s);"); // email_user, User._TABLE_NAME, User._TABLE_FIELDS.email
 
         stmnt = connection.prepareStatement(String.format(sb.toString(),

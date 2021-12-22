@@ -9,9 +9,9 @@ public class User {
     protected String lastname;
     protected String username;
     protected String password;
-    protected LinkedList<Note> notes;
-    protected static String at = "@";
-    protected static char[] needed_operators = {'!', '€', '§', '$', '&'};
+    protected transient LinkedList<Note> notes;
+    protected transient static String at = "@";
+    protected transient static char[] needed_operators = {'!', '€', '§', '$', '&'};
     public User(
             String email,
             String forename,
