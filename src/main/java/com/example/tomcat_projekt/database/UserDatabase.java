@@ -93,6 +93,7 @@ public class UserDatabase extends MySQLDatabase {
     }
 
     public LinkedList<User> getAllUser() throws SQLException {
+        createTable();
         var sql = String.format("SELECT " +
                         "%s " + // email
                         ",%s " + // forename
@@ -130,6 +131,7 @@ public class UserDatabase extends MySQLDatabase {
     }
 
     public boolean hasUser(User user) throws SQLException {
+        createTable();
         var sql = String.format("SELECT COUNT(*) AS 'user_count' FROM %s WHERE %s = ? OR %s = ?",
                 _TABLE_NAME,
                 _TABLE_FIELDS.email,
@@ -148,6 +150,7 @@ public class UserDatabase extends MySQLDatabase {
     }
 
     public boolean insertUser(User user) throws SQLException {
+        createTable();
         var sql = String.format(
                 "INSERT INTO %s (%s, %s, %s, %s, %s)" +
                         "VALUES (?, ?, ?, ?, ?);",
@@ -170,6 +173,7 @@ public class UserDatabase extends MySQLDatabase {
     }
 
     public User getUser(String email, String username) throws SQLException {
+        createTable();
         var sql = String.format("SELECT" +
                         "%s," + // forename
                         "%s," + // lastname
@@ -210,6 +214,7 @@ public class UserDatabase extends MySQLDatabase {
     }
 
     public boolean canLogin(User user) throws SQLException {
+        createTable();
         var sql = String.format("SELECT COUNT(*) FROM %s WHERE %s = ? AND %s = ?;",
                 _TABLE_NAME,
                 _TABLE_FIELDS.email.name(),
