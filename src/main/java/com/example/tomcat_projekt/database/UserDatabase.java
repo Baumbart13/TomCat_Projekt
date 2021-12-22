@@ -99,7 +99,7 @@ public class UserDatabase extends MySQLDatabase {
                         ",%s " + // forename
                         ",%s " + // lastname
                         ",%s " + // username
-                        ",sha2(%s, 256) " + // password
+                        ",%s " + // password
                         "FROM %s;", // _TABLE_NAME
                 _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.forename.name(),
@@ -152,8 +152,8 @@ public class UserDatabase extends MySQLDatabase {
     public boolean insertUser(User user) throws SQLException {
         createTable();
         var sql = String.format(
-                "INSERT INTO %s (%s, %s, %s, %s, sha2(%s, 256))" +
-                        "VALUES (?, ?, ?, ?, ?);",
+                "INSERT INTO %s (%s, %s, %s, %s, %s)" +
+                        " VALUES (?, ?, ?, ?, sha2(?, 256));",
                 _TABLE_NAME,
                 _TABLE_FIELDS.email,
                 _TABLE_FIELDS.username,
@@ -177,7 +177,7 @@ public class UserDatabase extends MySQLDatabase {
         var sql = String.format("SELECT" +
                         "%s," + // forename
                         "%s," + // lastname
-                        "sha2(%s, 256)," + // password
+                        "%s," + // password
                         "FROM %s " +
                         "WHERE %s = ?" +
                         "OR %s = ?;",
@@ -215,7 +215,7 @@ public class UserDatabase extends MySQLDatabase {
 
     public boolean canLogin(User user) throws SQLException {
         createTable();
-        var sql = String.format("SELECT COUNT(*) FROM %s WHERE %s = ? AND %s = ?;",
+        var sql = String.format("SELECT COUNT(*) FROM %s WHERE %s = ? AND %s = sha2(?, 256);",
                 _TABLE_NAME,
                 _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.password.name());
