@@ -48,10 +48,16 @@ public class Credentials {
     }
 
     public static DatabaseCredentials loadDatabase(String file){
+        return new DatabaseCredentials("localhost:3306", "db_user", "db_password", "notes"); // TODO: export resources to tomcat-folder
+        /*
         var out = new DatabaseCredentials("", "", "", "");
+        var f = Path.of(file);
+        if(!f.toFile().exists()){
+            f.toFile().mkdirs();
+        }
+        logger.log(Level.INFO, f.toAbsolutePath().toString());
 
-        throw new UnsupportedOperationException("TODO: export resources to tomcat-folder");
-        /*try{
+        try{
             reader = initReader(file); // TODO: export resources to tomcat-folder
             if(!reader.readLine().contains("hostname,user,password,database")){
                 throw new IOException("Corrupted database file!");
