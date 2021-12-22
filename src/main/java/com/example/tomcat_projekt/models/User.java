@@ -10,8 +10,8 @@ public class User {
     protected String username;
     protected String password;
     protected LinkedList<Note> notes;
-    protected String at = "@";
-    protected char[] needed_operators = {'!', '€', '§', '$', '&'};
+    protected static String at = "@";
+    protected static char[] needed_operators = {'!', '€', '§', '$', '&'};
     public User(
             String email,
             String forename,
@@ -23,6 +23,16 @@ public class User {
         this.setLastname(lastname);
         this.setUsername(username);
         this.setPassword(password);
+    }
+
+    protected static boolean containsAnyNeededOperators(String base){
+        for(var c : needed_operators){
+            var str = "" + c;
+            if(base.contains(str)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public User(){
@@ -77,7 +87,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        if(password.length() >= 8 && password.contains(Arrays.toString(needed_operators)))
+        if(password.length() >= 8 && containsAnyNeededOperators(password))
         {
             this.password = password;
         }
