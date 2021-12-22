@@ -61,7 +61,7 @@ public class NotesDatabase extends MySQLDatabase{
         PreparedStatement stmnt;
         var sb = new StringBuilder();
 
-        sb.append("CREATE TABLE IF NOT EXISTS %s (");
+        sb.append("CREATE TABLE IF NOT EXISTS %s ("); // tableName
         sb.append("%s VARCHAR(40) NOT NULL,"); // email_user
         sb.append("%s INT NOT NULL,"); // note_index
         sb.append("%s VARCHAR(500),"); // message
@@ -70,6 +70,7 @@ public class NotesDatabase extends MySQLDatabase{
         sb.append("FOREIGN KEY(%s) REFERENCES %s(%s);"); // email_user, User._TABLE_NAME, User._TABLE_FIELDS.email
 
         stmnt = connection.prepareStatement(String.format(sb.toString(),
+                tableName,
                 _TABLE_FIELDS.email_user.name(),
                 _TABLE_FIELDS.note_index.name(),
                 _TABLE_FIELDS.message.name(),
@@ -85,6 +86,7 @@ public class NotesDatabase extends MySQLDatabase{
     }
 
     public LinkedList<Note> getAllMessages(User user) throws SQLException{
+        createTable();
         var sql = String.format("SELECT %s, %s FROM %s WHERE %s = ?;",
                 _TABLE_FIELDS.note_index.name(),
                 _TABLE_FIELDS.message.name(),
