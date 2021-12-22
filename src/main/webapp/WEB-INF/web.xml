@@ -20,6 +20,10 @@
         <servlet-name>GetAllUsersServlet</servlet-name>
         <servlet-class>com.example.tomcat_projekt.servlets.GetAllUsersServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AppendToNotesServlet</servlet-name>
+        <servlet-class>com.example.tomcat_projekt.servlets.AppendToNotesServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -32,5 +36,9 @@
     <servlet-mapping>
         <servlet-name>GetAllUsersServlet</servlet-name>
         <url-pattern>/GetAllUsersServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AppendToNotesServlet</servlet-name>
+        <url-pattern>/AppendToNotesServlet</url-pattern>
     </servlet-mapping>
 </web-app>
