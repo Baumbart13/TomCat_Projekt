@@ -98,7 +98,7 @@ public class UserDatabase extends MySQLDatabase {
                         ",%s " + // forename
                         ",%s " + // lastname
                         ",%s " + // username
-                        ",%s " + // password
+                        ",sha2(%s, 256) " + // password
                         "FROM %s;", // _TABLE_NAME
                 _TABLE_FIELDS.email.name(),
                 _TABLE_FIELDS.forename.name(),
@@ -173,7 +173,7 @@ public class UserDatabase extends MySQLDatabase {
         var sql = String.format("SELECT" +
                         "%s," + // forename
                         "%s," + // lastname
-                        "%s," + // password
+                        "sha2(%s, 256)," + // password
                         "FROM %s " +
                         "WHERE %s = ?" +
                         "OR %s = ?;",

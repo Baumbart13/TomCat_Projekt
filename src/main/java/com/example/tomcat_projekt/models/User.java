@@ -1,5 +1,6 @@
 package com.example.tomcat_projekt.models;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class User {
@@ -9,7 +10,8 @@ public class User {
     protected String username;
     protected String password;
     protected LinkedList<Note> notes;
-
+    protected String at = "@";
+    protected char[] needed_operators = {'!', '€', '§', '$', '&'};
     public User(
             String email,
             String forename,
@@ -32,7 +34,9 @@ public class User {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if(email.contains(at)){
+            this.email = email;
+        }
     }
 
     public String getForename() {
@@ -40,7 +44,10 @@ public class User {
     }
 
     public void setForename(String forename) {
-        this.forename = forename;
+        if(forename.length() >= 3)
+        {
+            this.forename = forename;
+        }
     }
 
     public String getLastname() {
@@ -48,7 +55,10 @@ public class User {
     }
 
     public void setLastname(String lastname) {
-        this.lastname = lastname;
+        if(lastname.length() >= 3)
+        {
+            this.lastname = lastname;
+        }
     }
 
     public String getUsername() {
@@ -56,7 +66,10 @@ public class User {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        if(username.length() > 3)
+        {
+            this.username = username;
+        }
     }
 
     public String getPassword() {
@@ -64,7 +77,10 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if(password.length() >= 8 && password.contains(Arrays.toString(needed_operators)))
+        {
+            this.password = password;
+        }
     }
 
     public LinkedList<Note> getNotes(){
