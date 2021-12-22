@@ -85,23 +85,45 @@ public class NotesDatabase extends MySQLDatabase {
         stmnt.execute();
     }
 
-    public LinkedList<Note> getAllMessages(User user) throws SQLException{
+    public LinkedList<Note> getAllNotes(String email, String username) throws SQLException {
+        var u = new User();
+        u.setEmail(email);
+        u.setUsername(username);
+        return getAllNotes(u);
+    }
+
+    public LinkedList<Note> getAllNotes(User user) throws SQLException {
         createTable();
-        var sql = String.format("SELECT %s, %s FROM %s WHERE %s = ?;",
+        var sql = String.format("SELECT " +
+                        "%s " + // email_user
+                        ",%s " + // note_index
+                        ",%s " + // message
+                        "FROM %s" + // _TABLE_NAME
+                        " WHERE %s = ? OR %s = ?;",
+                _TABLE_FIELDS.email_user.name(),
                 _TABLE_FIELDS.note_index.name(),
                 _TABLE_FIELDS.message.name(),
                 _TABLE_NAME,
-                UserDatabase._TABLE_FIELDS.email);
+                UserDatabase._TABLE_FIELDS.email.name(), UserDatabase._TABLE_FIELDS.username.name());
+
         var stmnt = connection.prepareStatement(sql);
         stmnt.setString(1, user.getEmail());
-        var rs  = stmnt.executeQuery();
-        LinkedList<Note> notes = new LinkedList<Note>();
-        while(rs.next()){
+        stmnt.setString(2, user.getUsername());
+        var rs = stmnt.executeQuery(sql);
+
+        var notes = new LinkedList<Note>();
+        while (rs.next()) {
+            var u = new User();
+            u.setEmail(rs.getString(_TABLE_FIELDS.email_user.name()));
+            var note_index = rs.getInt(_TABLE_FIELDS.note_index.name());
+            var msg = rs.getString(_TABLE_FIELDS.message.name());
             notes.add(new Note(
                     user,
-                    rs.getInt(1),
-                    rs.getString(2)));
+                    note_index,
+                    msg
+            ));
         }
+        rs.close();
         return notes;
     }
 }
