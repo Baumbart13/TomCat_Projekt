@@ -30,16 +30,16 @@
     <input type="email" name="usermail" value="" placeholder="eminem@marshall.matters"/>
     <br/>
     <label>Firstname:</label>
-    <input type="text" name="firstname" value="" placeholder="Max"/>
+    <input type="text" name="firstname" value="" placeholder="Max" minlength="3"/>
     <br/>
     <label>Lastname:</label>
-    <input type="text" name="lastname" value="" placeholder="Kellerkind"/>
+    <input type="text" name="lastname" value="" placeholder="Kellerkind" minlength="3"/>
     <br/>
     <label>Username:</label>
-    <input type="text" name="username" value="" placeholder="Baumkind13"/>
+    <input type="text" name="username" value="" placeholder="Baumkind13" minlength="4"/>
     <br/>
     <label>Password:</label>
-    <input type="password" name="userpass" value="" placeholder="Haley"/>
+    <input type="password" name="userpass" value="" placeholder="Haley" minlength="8"/>
     <br/>
     <input type="submit" value="Register Me!">
     <h3><a href="Login.jsp">Already have an account?</a></h3>
