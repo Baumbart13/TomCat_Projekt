@@ -70,6 +70,7 @@ public class NotesDatabase extends MySQLDatabase{
         sb.append("FOREIGN KEY(%s) REFERENCES %s(%s);"); // email_user, User._TABLE_NAME, User._TABLE_FIELDS.email
 
         stmnt = connection.prepareStatement(String.format(sb.toString(),
+                tableName,
                 _TABLE_FIELDS.email_user.name(),
                 _TABLE_FIELDS.note_index.name(),
                 _TABLE_FIELDS.message.name(),
