@@ -152,7 +152,7 @@ public class UserDatabase extends MySQLDatabase {
     public boolean insertUser(User user) throws SQLException {
         createTable();
         var sql = String.format(
-                "INSERT INTO %s (%s, %s, %s, %s, %s)" +
+                "INSERT INTO %s (%s, %s, %s, %s, sha2(%s, 256))" +
                         "VALUES (?, ?, ?, ?, ?);",
                 _TABLE_NAME,
                 _TABLE_FIELDS.email,
