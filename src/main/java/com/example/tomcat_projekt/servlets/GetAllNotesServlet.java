@@ -32,7 +32,7 @@ public class GetAllNotesServlet extends ServletTemplate{
         var username = (String)session.getAttribute("username");
 
         // get all sql-data from SQL->notes_user
-        var l = NotesService.getInstance().getAllNotes(db, "", username);
+        var l = NotesService.getInstance().getAllNotes(db, email, username);
         var gson = new GsonBuilder().serializeNulls().create();
         var json = gson.toJson(l);
         // send all data to website

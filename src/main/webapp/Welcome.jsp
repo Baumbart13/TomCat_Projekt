@@ -19,10 +19,25 @@
         <input type="text" name="new_note"><br>
         <input type="submit" value="note_added">
     </form>
+    <button type="button" onclick="ListAllEntriesButton()">
+        List all entries
+    </button>
     <div id="notes_table">
 
     </div>
 <script>
+    function ListAllEntriesButton(){
+        const x = new XMLHttpRequest();
+        x.onload = function(){
+            alert(this.responseText);
+            var arr = JSON.parse(this.responseText);
+            var html = convertNotesArrayToHtml(arr, true);
+            document.getElementById("notes_table").innerHTML = html;
+        }
+        x.open("POST", "GetAllNotesServlet", true);
+        x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        x.send();
+    }
     function RequestUserChat() {
         const x = new XMLHttpRequest();
         x.onload = function(){
@@ -35,12 +50,15 @@
         x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         x.send();
     }
-    function convertNotesArrayToHtml(arr){
+    function convertNotesArrayToHtml(arr, debug = false){
         var s = "<table>";
         for(i = 0; i < arr.length; ++i){
             var o = arr[i];
             s += "<tr>";
-            s += "<td>" + o.note_timestamp + "</td>";
+            if(debug){
+                s+="<td>" + o.user + "</td>";
+            }
+            s += "<td>" + o.note_index + "</td>";
             s += "<td>" + o.note_message + "</td>";
             s += "</td>";
         }

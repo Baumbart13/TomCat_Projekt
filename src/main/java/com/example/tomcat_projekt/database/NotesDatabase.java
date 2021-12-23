@@ -67,7 +67,7 @@ public class NotesDatabase extends MySQLDatabase {
         sb.append("%s VARCHAR(500),"); // message
 
         sb.append("PRIMARY KEY(%s),"); // note_index
-        sb.append("FOREIGN KEY(%s) REFERENCES %s(%s);"); // email_user, User._TABLE_NAME, User._TABLE_FIELDS.email
+        sb.append("FOREIGN KEY(%s) REFERENCES %s(%s));"); // email_user, User._TABLE_NAME, User._TABLE_FIELDS.email
 
         stmnt = connection.prepareStatement(String.format(sb.toString(),
                 tableName,
@@ -98,13 +98,15 @@ public class NotesDatabase extends MySQLDatabase {
                         "%s " + // email_user
                         ",%s " + // note_index
                         ",%s " + // message
-                        "FROM %s" + // _TABLE_NAME
-                        " WHERE %s = ? OR %s = ?;",
+                        "FROM %s, %s" + // _TABLE_NAME, UserDatabase._TABLE_NAME
+                        " WHERE %s.%s = ?" +
+                        " OR %s.%s = ?;",
                 _TABLE_FIELDS.email_user.name(),
                 _TABLE_FIELDS.note_index.name(),
                 _TABLE_FIELDS.message.name(),
-                _TABLE_NAME,
-                UserDatabase._TABLE_FIELDS.email.name(), UserDatabase._TABLE_FIELDS.username.name());
+                _TABLE_NAME, UserDatabase._TABLE_NAME,
+                UserDatabase._TABLE_NAME, UserDatabase._TABLE_FIELDS.email.name(),
+                UserDatabase._TABLE_NAME, UserDatabase._TABLE_FIELDS.username.name());
 
         var stmnt = connection.prepareStatement(sql);
         stmnt.setString(1, user.getEmail());
