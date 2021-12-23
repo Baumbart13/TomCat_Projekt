@@ -206,28 +206,32 @@ public class UserDatabase extends MySQLDatabase {
         return user;
     }
 
-    public boolean canLogin(String email, String password) throws SQLException {
+    public boolean canLogin(String email, String username, String password) throws SQLException {
         var u = new User();
         u.setEmail(email);
+        u.setEmail(username);
         u.setPassword(password);
         return canLogin(u);
     }
 
     public boolean canLogin(User user) throws SQLException {
         createTable();
-        var sql = String.format("SELECT COUNT(*) FROM %s WHERE %s = ? AND %s = sha2(?, 256);",
+        var sql = String.format("SELECT COUNT(*) FROM %s WHERE (%s = ? OR %s = ?) AND %s = sha2(?, 256);",
                 _TABLE_NAME,
                 _TABLE_FIELDS.email.name(),
+                _TABLE_FIELDS.username.name(),
                 _TABLE_FIELDS.password.name());
         var stmnt = connection.prepareStatement(sql);
         stmnt.setString(1, user.getEmail());
-        stmnt.setString(2, user.getPassword());
+        stmnt.setString(2, user.getUsername());
+        stmnt.setString(3, user.getPassword());
         var rs = stmnt.executeQuery();
         if (rs.next()) {
             var i = rs.getInt(1) > 0;
             rs.close();
             return i;
         }
+        rs.close();
         return false;
     }
 }

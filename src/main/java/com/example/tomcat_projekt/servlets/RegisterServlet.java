@@ -32,7 +32,24 @@ public class RegisterServlet extends ServletTemplate {
         String username = request.getParameter("username");
         var user = new User(email, firstname, lastname, username, password);
         boolean isSuccess = Register(user);
-        RequestDispatcher d = request.getRequestDispatcher("/Login.jsp");
+        RequestDispatcher d;
+        if(isSuccess){
+            d = request.getRequestDispatcher("/Login.jsp");
+        }else{
+            if(email == null || email.length() < 5 || !email.contains(User.AT) || email.indexOf(".", email.indexOf(User.AT)) <= email.indexOf(User.AT)){
+                request.setAttribute("error", "Please provide a correct email");
+            }else if(password == null || !User.containsAnyNeededOperators(password) || password.length() < 8){
+                request.setAttribute("error", "Your password needs to provide at least 8 characters and at least of the following characters: " + new String(User.NEEDED_OPERATORS));
+            }else if(firstname == null || firstname.length() < 4){
+                request.setAttribute("error", "Your first name needs to be at least 4 characters long");
+            }else if(lastname == null || lastname.length() < 4){
+                request.setAttribute("error", "Your last name needs to be at least 4 characters long");
+            }else if(username == null || username.length() < 3){
+                request.setAttribute("error", "Your username needs to be at least 3 characters long");
+            }
+            d = request.getRequestDispatcher("/Register.jsp");
+        }
+
         d.forward(request, response);
     }
 

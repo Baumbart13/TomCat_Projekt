@@ -1,6 +1,5 @@
 package com.example.tomcat_projekt.models;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class User {
@@ -10,8 +9,8 @@ public class User {
     protected String username;
     protected String password;
     protected transient LinkedList<Note> notes;
-    protected transient static String at = "@";
-    protected transient static char[] needed_operators = {'!', '€', '§', '$', '&'};
+    public transient final static String AT = "@";
+    public transient final static char[] NEEDED_OPERATORS = {'!', '€', '§', '$', '&'};
     public User(
             String email,
             String forename,
@@ -25,10 +24,10 @@ public class User {
         this.setPassword(password);
     }
 
-    protected static boolean containsAnyNeededOperators(String base){
-        for(var c : needed_operators){
+    public static boolean containsAnyNeededOperators(String toBeChecked){
+        for(var c : NEEDED_OPERATORS){
             var str = "" + c;
-            if(base.contains(str)){
+            if(toBeChecked.contains(str)){
                 return true;
             }
         }
@@ -44,7 +43,7 @@ public class User {
     }
 
     public void setEmail(String email) {
-        if(email.contains(at)){
+        if(email.contains(AT)){
             this.email = email;
         }
     }

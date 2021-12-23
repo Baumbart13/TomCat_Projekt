@@ -26,6 +26,7 @@ public class LoginServlet extends ServletTemplate {
             dbm = new UserDatabase();
         }
         String email = request.getParameter("usermail");
+        String username = request.getParameter("usermail");
         String password = request.getParameter("userpass");
         boolean isSuccess = checkIfValid(email, password);
 
@@ -48,7 +49,9 @@ public class LoginServlet extends ServletTemplate {
         boolean success = false;
         try {
             dbm.connect();
-            success = dbm.canLogin(email, password);
+            var username = email; // because it comes from the same field, where
+                                         // login is available through email and username
+            success = dbm.canLogin(email, username, password);
             dbm.disconnect();
         } catch (SQLException e) {
             throw new ServletException(e.getMessage());

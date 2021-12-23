@@ -20,7 +20,7 @@
     %>
     <form action="LoginServlet" method="post">
         <label>User:</label>
-        <input type="email" name="usermail" value="" placeholder="eminem@marshall.matters"/>
+        <input type="text" name="usermail" value="" placeholder="eminem@marshall.matters"/>
         <br/>
         <label>Password:</label>
         <input type="password" name="userpass" value="" placeholder="Haley"/>
