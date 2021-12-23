@@ -40,12 +40,14 @@ public class RegisterServlet extends ServletTemplate {
                 request.setAttribute("error", "Please provide a correct email");
             }else if(password == null || !User.containsAnyNeededOperators(password) || password.length() < 8){
                 request.setAttribute("error", "Your password needs to provide at least 8 characters and at least of the following characters: " + new String(User.NEEDED_OPERATORS));
-            }else if(firstname == null || firstname.length() < 4){
-                request.setAttribute("error", "Your first name needs to be at least 4 characters long");
-            }else if(lastname == null || lastname.length() < 4){
-                request.setAttribute("error", "Your last name needs to be at least 4 characters long");
-            }else if(username == null || username.length() < 3){
-                request.setAttribute("error", "Your username needs to be at least 3 characters long");
+            }else if(firstname == null || firstname.length() < 3){
+                request.setAttribute("error", "Your first name needs to be at least 3 characters long");
+            }else if(lastname == null || lastname.length() < 3){
+                request.setAttribute("error", "Your last name needs to be at least 3 characters long");
+            }else if(username == null || username.length() < 4){
+                request.setAttribute("error", "Your username needs to be at least 4 characters long");
+            }else{
+                request.setAttribute("error", "This email and/or username is already taken");
             }
             d = request.getRequestDispatcher("/Register.jsp");
         }
@@ -57,6 +59,9 @@ public class RegisterServlet extends ServletTemplate {
         boolean success = false;
         try {
             dbm.connect();
+            if(dbm.hasUser(user)){
+                return success;
+            }
             success = dbm.insertUser(user);
             dbm.disconnect();
             //return dbm.registerUser(email, password);

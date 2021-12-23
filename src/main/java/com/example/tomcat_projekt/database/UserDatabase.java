@@ -175,12 +175,12 @@ public class UserDatabase extends MySQLDatabase {
     public User getUser(String email, String username) throws SQLException {
         createTable();
         var sql = String.format("SELECT" +
-                        "%s," + // forename
-                        "%s," + // lastname
-                        "%s," + // password
-                        "FROM %s " +
-                        "WHERE %s = ?" +
-                        "OR %s = ?;",
+                        " %s," + // forename
+                        " %s," + // lastname
+                        " %s" + // password
+                        " FROM %s" +
+                        " WHERE %s = ?" +
+                        " OR %s = ?;",
                 _TABLE_FIELDS.forename.name(),
                 _TABLE_FIELDS.lastname.name(),
                 _TABLE_FIELDS.password.name(),
@@ -189,6 +189,9 @@ public class UserDatabase extends MySQLDatabase {
                 _TABLE_FIELDS.username.name());
 
         var stmnt = connection.prepareStatement(sql);
+        stmnt.setString(1, email);
+        stmnt.setString(2, username);
+
         var rs = stmnt.executeQuery();
         User user = new User();
         if (rs.next()) {

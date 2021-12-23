@@ -11,17 +11,18 @@ public class User {
     protected transient LinkedList<Note> notes;
     public transient final static String AT = "@";
     public transient final static char[] NEEDED_OPERATORS = {'!', '€', '§', '$', '&'};
+
     public User(
             String email,
             String forename,
             String lastname,
             String username,
             String password) {
-        this.setEmail(email);
-        this.setForename(forename);
-        this.setLastname(lastname);
-        this.setUsername(username);
-        this.setPassword(password);
+        this.email = email;
+        this.forename = forename;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
     }
 
     public static boolean containsAnyNeededOperators(String toBeChecked){
