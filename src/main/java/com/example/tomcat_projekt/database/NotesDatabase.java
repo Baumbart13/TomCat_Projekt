@@ -92,18 +92,70 @@ public class NotesDatabase extends MySQLDatabase {
         return getAllNotes(u);
     }
 
+    public void insertNote(String message, String email, String username) throws SQLException{
+        var u = new User();
+        u.setUsername(username);
+        u.setEmail(email);
+        var n = new Note();
+        n.setNote_message(message);
+        insertNote(n, u);
+    }
+
+    public void insertNote(Note note, String email, String username) throws SQLException{
+        var u = new User();
+        u.setEmail(email);
+        u.setUsername(username);
+        insertNote(note, u);
+    }
+
+    public void insertNote(String message, User user) throws SQLException{
+        var n = new Note();
+        n.setNote_message(message);
+        insertNote(n, user);
+    }
+
+    public void insertNote(Note note, User user) throws SQLException {
+        createTable();
+        // get highest message_index
+        try {
+            var notes = getAllNotes(user);
+            var highestNote = new Note();
+            highestNote.setNote_index(-1);
+            for (var n : notes) {
+                if (n.getNote_index() > highestNote.getNote_index()) {
+                    highestNote = n;
+                }
+            }
+            if (highestNote != null) {
+                note.setNote_index(highestNote.getNote_index());
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        // insert new note into database
+        var sql = String.format("INSERT INTO %s" +
+                        "(%s, " +
+                        "%s) VALUES (?, ?);",
+                _TABLE_FIELDS.email_user.name(),
+                _TABLE_FIELDS.message.name());
+        var stmnt = connection.prepareStatement(sql);
+        stmnt.setString(1, user.getEmail());
+        stmnt.setString(2, note.getNote_message());
+        stmnt.execute();
+    }
+
     public LinkedList<Note> getAllNotes(User user) throws SQLException {
         createTable();
         var sql = String.format("SELECT " +
-                        "%s " + // email_user
-                        ",%s " + // note_index
-                        ",%s " + // message
+                        "%s.%s " + // notes_notes.email_user
+                        ",%s.%s " + // notes_notes.note_index
+                        ",%s.%s " + // notes_notes.message
                         "FROM %s, %s" + // _TABLE_NAME, UserDatabase._TABLE_NAME
                         " WHERE %s.%s = ?" +
                         " OR %s.%s = ?;",
-                _TABLE_FIELDS.email_user.name(),
-                _TABLE_FIELDS.note_index.name(),
-                _TABLE_FIELDS.message.name(),
+                _TABLE_NAME, _TABLE_FIELDS.email_user.name(),
+                _TABLE_NAME, _TABLE_FIELDS.note_index.name(),
+                _TABLE_NAME, _TABLE_FIELDS.message.name(),
                 _TABLE_NAME, UserDatabase._TABLE_NAME,
                 UserDatabase._TABLE_NAME, UserDatabase._TABLE_FIELDS.email.name(),
                 UserDatabase._TABLE_NAME, UserDatabase._TABLE_FIELDS.username.name());

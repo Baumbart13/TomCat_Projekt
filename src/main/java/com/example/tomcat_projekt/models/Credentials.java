@@ -48,7 +48,7 @@ public class Credentials {
     }
 
     public static DatabaseCredentials loadDatabase(String file){
-        return new DatabaseCredentials("localhost:3306", "root", "DuArschloch4", "notes"); // TODO: export resources to tomcat-folder
+        return new DatabaseCredentials("localhost:3306", "root", "SHW_Destroyer02", "notes"); // TODO: export resources to tomcat-folder
         /*
         var out = new DatabaseCredentials("", "", "", "");
         var f = Path.of(file);
